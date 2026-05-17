@@ -38,7 +38,7 @@ class CarbonCalculator:
         suggestions = {
             "plane": "Consider traveling by train to cut CO2 emissions by about 6x. If distance allows, choose an electric car or a high-speed train.",
             "car": "Try taking a train or bus. A train emits about 4.5x less CO2 than a car. Also consider carpooling to reduce impact.",
-            "train": "Great choice! Trains are among the most eco-friendly options. For an even lower footprint, consider biking or walking for short trips.",
+            "train": "Great choice!  Trains are among the most eco-friendly options. For an even lower footprint, consider biking or walking for short trips.",
         }
         return suggestions.get(self.transport_type, "Choose public transport and plan routes efficiently.")
 
@@ -289,3 +289,4 @@ def fetch_forecast_data(city, api_key="demo"):
 
     except requests.RequestException:
         return {"city": city, "days": [], "hours": [], "error": True}
+
