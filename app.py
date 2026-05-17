@@ -1,11 +1,12 @@
+import os
 from functools import wraps
 from flask import Flask, render_template, request, redirect, url_for, session
 from utils import CarbonCalculator, TravelProfile, UserAuth, fetch_weather_data, fetch_forecast_data
 
 app = Flask(__name__)
-app.secret_key = "ecotrip-secret-key-2024"
+app.secret_key = os.environ.get("SECRET_KEY", "ecotrip-dev-fallback-key-change-me")
 
-OWM_API_KEY = "dfe39e12c246e653195259ffe54a7341"
+OWM_API_KEY = os.environ.get("OWM_API_KEY", "demo")
 
 
 def login_required(f):
