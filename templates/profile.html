@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block title %}EcoTrip Planner - Profile {{ username }}{% endblock %}
+
+{% block content %}
+
+<section class="page-hero text-center">
+  <div class="container position-relative">
+    <div class="profile-avatar-wrap animate-fadeup">
+      <i class="bi bi-person-fill"></i>
+    </div>
+    <h1 class="animate-fadeup delay-1">{{ username }}</h1>
+    <p class="animate-fadeup delay-2">Personal eco profile for travelers</p>
+  </div>
+</section>
+
+<div class="wave-divider" style="background:var(--sand);">
+  <svg viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,0 C480,40 960,0 1440,0 L1440,40 L0,40 Z" fill="#0f3d23"/>
+  </svg>
+</div>
+
+<div style="background:var(--sand);padding:80px 0;">
+  <div class="container">
+    <div class="row g-4 justify-content-center">
+
+      <div class="col-lg-4 animate-fadeup delay-1">
+        <div class="badge-card">
+          <span class="section-label d-inline-flex mb-4">
+            <i class="bi bi-award-fill"></i>Your status
+          </span>
+
+          <div class="mb-3">
+            {% if badge == "Greta Thunberg" %}
+            <i class="bi bi-flower1 badge-icon-large" style="color:var(--green-500);"></i>
+            {% elif badge == "Forest Guardian" %}
+            <i class="bi bi-tree-fill badge-icon-large" style="color:var(--green-600);"></i>
+            {% elif badge == "Green Traveler" %}
+            <i class="bi bi-globe-americas badge-icon-large" style="color:#2563eb;"></i>
+            {% elif badge == "Occasional Ecologist" %}
+            <i class="bi bi-emoji-neutral-fill badge-icon-large" style="color:#d97706;"></i>
+            {% elif badge == "Oil Tycoon" %}
+            <i class="bi bi-fuel-pump-fill badge-icon-large" style="color:#dc2626;"></i>
+            {% else %}
+            <i class="bi bi-patch-question-fill badge-icon-large" style="color:var(--gray-400);"></i>
+            {% endif %}
+          </div>
+
+          <div class="badge-name mb-4">{{ badge }}</div>
+
+          <div class="row g-2 mb-4">
+            <div class="col-6">
+              <div class="mini-stat">
+                <div class="mini-stat-num" style="color:var(--green-700);">{{ trips|length }}</div>
+                <div class="text-muted" style="font-size:0.75rem;font-weight:500;margin-top:4px;">trips</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="mini-stat">
+                <div class="mini-stat-num" style="color:#dc2626;">{{ total_co2 }}</div>
+                <div class="text-muted" style="font-size:0.75rem;font-weight:500;margin-top:4px;">kg CO2</div>
+              </div>
+            </div>
+          </div>
+
+          {% if total_co2 > 0 %}
+          <div>
+            <div class="d-flex justify-content-between mb-1" style="font-size:0.78rem;font-weight:600;">
+              <span style="color:var(--gray-600);">Eco impact</span>
+              <span style="color:
+                {% if total_co2 <= 100 %}var(--green-700)
+                {% elif total_co2 <= 300 %}#d97706
+                {% else %}#dc2626
+                {% endif %};">
+                {% if total_co2 <= 30 %}Excellent
+                {% elif total_co2 <= 100 %}Good
+                {% elif total_co2 <= 300 %}Moderate
+                {% else %}High impact{% endif %}
+              </span>
+            </div>
+            <div class="eco-progress">
+              {% set pct = [((total_co2 / 700) * 100)|int, 100]|min %}
+              <div class="eco-progress-bar" style="width:{{ pct }}%;background:
+                {% if total_co2 <= 100 %}var(--green-500)
+                {% elif total_co2 <= 300 %}#f59e0b
+                {% else %}#ef4444{% endif %};"></div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="col-lg-7 animate-fadeup delay-2">
+        <div class="content-card h-100">
+          <div class="card-inner pb-0">
+            <div class="d-flex align-items-center gap-2 mb-0">
+              <div class="feature-icon-wrap ficon-green" style="width:44px;height:44px;font-size:1.1rem;border-radius:10px;">
+                <i class="bi bi-clock-history"></i>
+              </div>
+              <h5 class="fw-bold mb-0">Trip history</h5>
+            </div>
+          </div>
+
+          {% if trips %}
+          <div class="mt-3">
+            {% for trip in trips %}
+            <div class="trip-row">
+              <div class="trip-icon-dot flex-shrink-0
+                {% if trip.transport_type == 'train' %}
+                " style="background:var(--green-100);color:var(--green-700);">
+                <i class="bi bi-train-front-fill"></i>
+                {% elif trip.transport_type == 'car' %}
+                " style="background:#fef3c7;color:#b45309;">
+                <i class="bi bi-car-front-fill"></i>
+                {% else %}
+                " style="background:#fee2e2;color:#b91c1c;">
+                <i class="bi bi-airplane-fill"></i>
+                {% endif %}
+              </div>
+
+              <div class="flex-grow-1 min-w-0">
+                <div class="fw-semibold" style="font-size:0.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                  {{ trip.origin }} <i class="bi bi-arrow-right text-muted mx-1" style="font-size:0.75rem;"></i> {{ trip.destination }}
+                </div>
+                <div class="text-muted" style="font-size:0.78rem;">
+                  {{ trip.distance }} km
+                  &bull;
+                  {{ transport_labels.get(trip.transport_type, trip.transport_type) }}
+                </div>
+              </div>
+
+              <div class="text-end flex-shrink-0">
+                <div class="fw-bold" style="font-size:0.95rem;color:var(--gray-800);">{{ trip.co2 }} kg</div>
+                <div>
+                  <span class="rating-circle rating-{{ trip.rating }}" style="width:26px;height:26px;font-size:0.75rem;display:inline-flex;">
+                    {{ trip.rating }}
+                  </span>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+
+            <div class="d-flex justify-content-between align-items-center px-4 py-3" style="background:var(--green-50);border-top:2px solid var(--green-100);">
+              <span class="fw-semibold small text-muted">Total CO2</span>
+              <span class="fw-bold" style="font-size:1.1rem;color:#dc2626;font-family:'Plus Jakarta Sans',sans-serif;">{{ total_co2 }} kg</span>
+            </div>
+          </div>
+
+          {% else %}
+          <div class="empty-state">
+            <i class="bi bi-suitcase2"></i>
+            <h6>No trips yet</h6>
+            <p>Plan your first eco-friendly trip!</p>
+            <a href="{{ url_for('index') }}" class="btn-eco-primary mt-2">
+              <i class="bi bi-plus-circle"></i>Add a trip
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-center mt-5">
+      <a href="{{ url_for('index') }}" class="btn-eco-primary">
+        <i class="bi bi-plus-circle"></i>Add a new trip
+      </a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

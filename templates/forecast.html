@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% block title %}EcoTrip Planner — Forecast · {{ data.city }}{% endblock %}
+
+{% block content %}
+
+<section class="page-hero text-center">
+  <div class="container position-relative">
+    <div class="page-hero-icon animate-fadeup">
+      <i class="bi bi-cloud-sun-fill"></i>
+    </div>
+    <h1 class="animate-fadeup delay-1">{{ data.city }}</h1>
+    <p class="animate-fadeup delay-2">5-day weather forecast</p>
+  </div>
+</section>
+
+<div class="wave-divider" style="background:var(--sand);">
+  <svg viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,0 C480,40 960,0 1440,0 L1440,40 L0,40 Z" fill="#0f3d23"/>
+  </svg>
+</div>
+
+{% if data.get('error') %}
+<div style="background:var(--sand);padding:80px 0;">
+  <div class="container text-center">
+    <div class="empty-state">
+      <i class="bi bi-cloud-slash-fill"></i>
+      <h5>Could not load forecast</h5>
+      <p>Weather data for <strong>{{ data.city }}</strong> is currently unavailable. Please try again later.</p>
+      <a href="{{ url_for('index') }}" class="btn-eco-primary mt-3">Back to Home</a>
+    </div>
+  </div>
+</div>
+
+{% else %}
+
+<div style="background:var(--sand);padding:80px 0 60px;">
+  <div class="container">
+
+    {% if data.days %}
+    <div class="d-flex align-items-center gap-2 mb-4">
+      <span class="section-label"><i class="bi bi-calendar-week-fill"></i>5-Day Forecast</span>
+    </div>
+
+    <div class="forecast-strip">
+      {% for day in data.days %}
+      <div class="forecast-day-card {% if loop.first %}forecast-day-today{% endif %} animate-fadeup" style="animation-delay:{{ loop.index0 * 0.08 }}s;">
+        <div class="fdc-label">{% if loop.first %}Today{% else %}{{ day.day_name[:3] }}{% endif %}</div>
+        <div class="fdc-date">{{ day.date_display }}</div>
+
+        <div class="fdc-icon-wrap">
+          <img src="https://openweathermap.org/img/wn/{{ day.icon }}@2x.png"
+               alt="{{ day.description }}" width="64" height="64"
+               onerror="this.style.display='none'">
+        </div>
+
+        <div class="fdc-desc">{{ day.description | capitalize }}</div>
+
+        <div class="fdc-temps">
+          <span class="fdc-hi">{{ day.temp_max }}°</span>
+          <div class="fdc-temp-bar">
+            {% set range_total = 35 %}
+            {% set bar_left  = ((day.temp_min + 10) / range_total * 100) | int %}
+            {% set bar_width = (((day.temp_max - day.temp_min) / range_total) * 100) | int %}
+            <div class="fdc-temp-fill" style="left:{{ bar_left }}%;width:{{ [bar_width, 20]|max }}%;"></div>
+          </div>
+          <span class="fdc-lo">{{ day.temp_min }}°</span>
+        </div>
+
+        <div class="fdc-meta">
+          <div class="fdc-meta-item">
+            <i class="bi bi-droplet-fill" style="color:#3b82f6;"></i>
+            {{ day.humidity }}%
+          </div>
+          <div class="fdc-meta-item">
+            <i class="bi bi-wind" style="color:#6366f1;"></i>
+            {{ day.wind_speed }} m/s
+          </div>
+        </div>
+
+        <div class="fdc-pop">
+          <div class="fdc-pop-bar">
+            <div class="fdc-pop-fill" style="width:{{ day.rain_chance }}%;"></div>
+          </div>
+          <span class="fdc-pop-label">
+            <i class="bi bi-cloud-rain-fill" style="color:#3b82f6;"></i>{{ day.rain_chance }}%
+          </span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if data.hours %}
+    <div class="mt-5">
+      <div class="d-flex align-items-center gap-2 mb-4">
+        <span class="section-label"><i class="bi bi-clock-fill"></i>Today — Hourly</span>
+      </div>
+      <div class="hourly-outer animate-fadeup delay-2">
+        <div class="hourly-strip">
+          {% for h in data.hours %}
+          {% set temp = h.temp %}
+          {% if temp >= 35 %}
+            {% set t_color = "#dc2626" %}{% set t_bg = "rgba(220,38,38,0.07)" %}
+          {% elif temp >= 28 %}
+            {% set t_color = "#ea580c" %}{% set t_bg = "rgba(234,88,12,0.07)" %}
+          {% elif temp >= 20 %}
+            {% set t_color = "#d97706" %}{% set t_bg = "rgba(217,119,6,0.07)" %}
+          {% elif temp >= 12 %}
+            {% set t_color = "#16a34a" %}{% set t_bg = "rgba(22,163,74,0.07)" %}
+          {% elif temp >= 5 %}
+            {% set t_color = "#2563eb" %}{% set t_bg = "rgba(37,99,235,0.07)" %}
+          {% else %}
+            {% set t_color = "#1e40af" %}{% set t_bg = "rgba(30,64,175,0.07)" %}
+          {% endif %}
+          <div class="hourly-slot {% if loop.first %}hourly-slot-now{% endif %}"
+               style="--t-color:{{ t_color }};--t-bg:{{ t_bg }};">
+            <div class="hs-time">
+              {% if loop.first %}<span class="hs-now-dot"></span>Now{% else %}{{ h.time }}{% endif %}
+            </div>
+            <div class="hs-icon-ring">
+              <img src="https://openweathermap.org/img/wn/{{ h.icon }}@2x.png"
+                   alt="" width="52" height="52"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+              <div class="hs-icon-fallback" style="display:none;">
+                {% if '01' in h.icon %}☀️
+                {% elif '02' in h.icon or '03' in h.icon %}⛅
+                {% elif '04' in h.icon %}☁️
+                {% elif '09' in h.icon or '10' in h.icon %}🌧
+                {% elif '11' in h.icon %}⛈
+                {% elif '13' in h.icon %}❄️
+                {% else %}🌤{% endif %}
+              </div>
+            </div>
+            <div class="hs-temp">{{ h.temp }}°</div>
+            <div class="hs-rain-wrap">
+              <div class="hs-rain-bar">
+                <div class="hs-rain-fill" style="width:{{ h.rain_chance }}%;"></div>
+              </div>
+              <span class="hs-rain-label">{{ h.rain_chance }}%</span>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if data.days %}
+    <div class="mt-5 animate-fadeup delay-3">
+      <div class="d-flex align-items-center gap-2 mb-4">
+        <span class="section-label"><i class="bi bi-bar-chart-fill"></i>Temperature Range</span>
+      </div>
+      <div class="content-card">
+        <div class="card-inner">
+          {% set all_temps = data.days | map(attribute='temp_max') | list %}
+          {% set abs_max = all_temps | max %}
+          {% for day in data.days %}
+          <div class="temp-range-row">
+            <div class="trr-day">{{ day.day_name[:3] if not loop.first else "Today" }}</div>
+            <div class="trr-bar-wrap">
+              {% set bar_pct = ((day.temp_max / abs_max) * 100) | int %}
+              {% set lo_pct  = ((day.temp_min / day.temp_max) * bar_pct) | int %}
+              <div class="trr-bar-bg">
+                <div class="trr-bar-lo"  style="width:{{ lo_pct  }}%;"></div>
+                <div class="trr-bar-hi"  style="width:{{ bar_pct }}%;"></div>
+              </div>
+            </div>
+            <div class="trr-vals">
+              <span class="trr-lo">{{ day.temp_min }}°</span>
+              <span class="trr-sep">/</span>
+              <span class="trr-hi">{{ day.temp_max }}°</span>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="text-center mt-5 d-flex gap-3 justify-content-center flex-wrap">
+      <a href="{{ url_for('destination', city=data.city) }}" class="btn-eco-outline">
+        <i class="bi bi-cloud-sun"></i>Current weather
+      </a>
+      <a href="{{ url_for('index') }}" class="btn-eco-primary">
+        <i class="bi bi-arrow-left"></i>Back to Home
+      </a>
+    </div>
+
+  </div>
+</div>
+
+{% endif %}
+{% endblock %}

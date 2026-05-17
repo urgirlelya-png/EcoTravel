@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block title %}EcoTrip Planner - {{ weather.city }}{% endblock %}
+
+{% block content %}
+
+<section class="page-hero text-center">
+  <div class="container position-relative">
+    <div class="page-hero-icon animate-fadeup">
+      <i class="bi bi-geo-alt-fill"></i>
+    </div>
+    <h1 class="animate-fadeup delay-1">{{ weather.city }}</h1>
+    <p class="animate-fadeup delay-2">Weather and environmental conditions at your destination</p>
+  </div>
+</section>
+
+<div class="wave-divider" style="background:var(--sand);">
+  <svg viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,0 C480,40 960,0 1440,0 L1440,40 L0,40 Z" fill="#0f3d23"/>
+  </svg>
+</div>
+
+<div style="background:var(--sand);padding:80px 0;">
+  <div class="container">
+    <div class="row g-4 justify-content-center">
+
+      <div class="col-lg-5 animate-fadeup delay-1">
+        <div class="content-card h-100">
+          <div class="card-inner">
+            <div class="d-flex align-items-center gap-2 mb-4">
+              <div class="feature-icon-wrap ficon-blue" style="width:44px;height:44px;font-size:1.1rem;border-radius:10px;">
+                <i class="bi bi-cloud-sun-fill"></i>
+              </div>
+              <h5 class="fw-bold mb-0">Current weather</h5>
+            </div>
+
+            <div class="d-flex align-items-center gap-3 mb-4 p-3 rounded-3" style="background:linear-gradient(135deg,var(--green-50),#dbeafe);">
+              <div class="weather-icon-wrap flex-shrink-0">
+                <img src="https://openweathermap.org/img/wn/{{ weather.icon }}@2x.png"
+                     alt="weather" width="72" height="72"
+                     onerror="this.style.display='none'">
+              </div>
+              <div>
+                <div style="font-size:3rem;font-weight:900;line-height:1;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.04em;color:var(--gray-800);">
+                  {{ weather.temperature }} C
+                </div>
+                <div class="text-muted text-capitalize fw-500" style="font-size:0.9rem;">{{ weather.description }}</div>
+              </div>
+            </div>
+
+            <div class="d-flex flex-column gap-0">
+              <div class="info-row">
+                <span class="label d-flex align-items-center gap-2">
+                  <i class="bi bi-thermometer-half" style="color:#ef4444;"></i>Feels like
+                </span>
+                <span class="value">{{ weather.feels_like }} C</span>
+              </div>
+              <div class="info-row">
+                <span class="label d-flex align-items-center gap-2">
+                  <i class="bi bi-droplet-fill" style="color:#3b82f6;"></i>Humidity
+                </span>
+                <span class="value">{{ weather.humidity }}%</span>
+              </div>
+              <div class="info-row">
+                <span class="label d-flex align-items-center gap-2">
+                  <i class="bi bi-wind" style="color:#6366f1;"></i>Wind speed
+                </span>
+                <span class="value">{{ weather.wind_speed }} m/s</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5 animate-fadeup delay-2">
+        <div class="content-card h-100">
+          <div class="card-inner">
+            <div class="d-flex align-items-center gap-2 mb-4">
+              <div class="feature-icon-wrap ficon-green" style="width:44px;height:44px;font-size:1.1rem;border-radius:10px;">
+                <i class="bi bi-lungs-fill"></i>
+              </div>
+              <h5 class="fw-bold mb-0">Air quality</h5>
+            </div>
+
+            {% if air_quality.aqi == 0 %}
+            <div class="aqi-badge mb-4" style="background:#f3f4f6;color:var(--gray-600);">
+              <i class="bi bi-dash-circle-fill"></i>Data unavailable
+            </div>
+            {% elif aqi_class == "success" %}
+            <div class="aqi-badge mb-4" style="background:var(--green-100);color:var(--green-800);">
+              <i class="bi bi-check-circle-fill"></i>{{ air_quality.aqi_label }}
+            </div>
+            <p class="text-muted small mb-4">Air is clean and safe for outdoor activities.</p>
+            {% elif aqi_class == "warning" %}
+            <div class="aqi-badge mb-4" style="background:#fef3c7;color:#b45309;">
+              <i class="bi bi-exclamation-triangle-fill"></i>{{ air_quality.aqi_label }}
+            </div>
+            <p class="text-muted small mb-4">Sensitive groups should reduce outdoor activity.</p>
+            {% else %}
+            <div class="aqi-badge mb-4" style="background:#fee2e2;color:#b91c1c;">
+              <i class="bi bi-x-circle-fill"></i>{{ air_quality.aqi_label }}
+            </div>
+            <p class="text-muted small mb-4">Air quality is poor. Avoid long outdoor walks.</p>
+            {% endif %}
+
+            <div class="d-flex flex-column gap-0">
+              {% for label, value, unit in [
+                ("AQI index", air_quality.aqi, ""),
+                ("CO (carbon monoxide)", air_quality.co, "ug/m3"),
+                ("NO2 (nitrogen dioxide)", air_quality.no2, "ug/m3"),
+                ("PM2.5 (fine particles)", air_quality.pm2_5, "ug/m3")
+              ] %}
+              <div class="info-row">
+                <span class="label">{{ label }}</span>
+                <span class="value">{{ value }}{% if unit %} <span class="fw-normal text-muted" style="font-size:0.78rem;">{{ unit }}</span>{% endif %}</span>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-10 animate-fadeup delay-3">
+        <div class="content-card">
+          <div class="card-inner d-flex align-items-start gap-4">
+            <div class="feature-icon-wrap ficon-green flex-shrink-0" style="width:52px;height:52px;font-size:1.3rem;border-radius:12px;">
+              <i class="bi bi-lightbulb-fill"></i>
+            </div>
+            <div>
+              <h6 class="fw-bold mb-1">Eco tip for travelers</h6>
+              <p class="text-muted small mb-0">
+                When visiting {{ weather.city }}, prefer public transport and biking. This helps keep the air clean and reduces your trip's carbon footprint. Avoid renting a car where strong city infrastructure is available.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-center mt-5 d-flex gap-3 justify-content-center flex-wrap">
+      <a href="{{ url_for('index') }}" class="btn-eco-outline">
+        <i class="bi bi-arrow-left"></i>Back to home
+      </a>
+      <a href="{{ url_for('forecast', city=weather.city) }}" class="btn-eco-primary">
+        <i class="bi bi-calendar-week-fill"></i>5-Day Forecast
+      </a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

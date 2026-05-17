@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block title %}EcoTrip Planner - About{% endblock %}
+
+{% block content %}
+
+<section class="page-hero text-center">
+  <div class="container position-relative">
+    <div class="page-hero-icon animate-fadeup">
+      <i class="bi bi-info-circle-fill"></i>
+    </div>
+    <h1 class="animate-fadeup delay-1">About the project</h1>
+    <p class="animate-fadeup delay-2">Our mission is to make every trip mindful and eco-friendly</p>
+  </div>
+</section>
+
+<div class="wave-divider" style="background:#fff;">
+  <svg viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,0 C480,40 960,0 1440,0 L1440,40 L0,40 Z" fill="#0f3d23"/>
+  </svg>
+</div>
+
+<div style="background:#fff;padding:80px 0;">
+  <div class="container">
+    <div class="row g-4 justify-content-center mb-5">
+      <div class="col-md-4 animate-fadeup delay-1">
+        <div class="stat-big-card">
+          <div class="stat-big-number">72%</div>
+          <p class="text-muted small mt-2 mb-0">transport emissions can be cut by choosing train over plane</p>
+        </div>
+      </div>
+      <div class="col-md-4 animate-fadeup delay-2">
+        <div class="stat-big-card">
+          <div class="stat-big-number">1.8 C</div>
+          <p class="text-muted small mt-2 mb-0">warming can be avoided if everyone chooses transport mindfully</p>
+        </div>
+      </div>
+      <div class="col-md-4 animate-fadeup delay-3">
+        <div class="stat-big-card">
+          <div class="stat-big-number">6x</div>
+          <p class="text-muted small mt-2 mb-0">lower CO2 emissions for train travel vs flights</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="background:var(--sand);padding:80px 0;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+        <div class="text-center mb-5">
+          <span class="section-label"><i class="bi bi-question-circle-fill"></i>FAQ</span>
+          <h2 class="section-title">Frequently asked questions</h2>
+        </div>
+        <div class="content-card animate-fadeup delay-1">
+          <div class="accordion accordion-flush eco-accordion" id="faq">
+
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true">
+                  <i class="bi bi-leaf-fill text-success me-2"></i>
+                  What is a travel carbon footprint?
+                </button>
+              </h2>
+              <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faq">
+                <div class="accordion-body">
+                  A carbon footprint is the amount of CO2 emitted by a trip. It depends on transport type and distance. A plane emits about 250 g CO2 per passenger-km, a car about 180 g, and a train about 40 g.
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                  <i class="bi bi-bar-chart-fill text-success me-2"></i>
+                  How does the eco rating system work?
+                </button>
+              </h2>
+              <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faq">
+                <div class="accordion-body">
+                  <p class="mb-2">The rating is based on total CO2 emissions:</p>
+                  <div class="d-flex flex-column gap-2">
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="rating-circle rating-A" style="width:32px;height:32px;font-size:0.9rem;">A</span>
+                      <span class="small">up to 20 kg CO2 - excellent</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="rating-circle rating-B" style="width:32px;height:32px;font-size:0.9rem;">B</span>
+                      <span class="small">20-60 kg CO2 - good</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="rating-circle rating-C" style="width:32px;height:32px;font-size:0.9rem;">C</span>
+                      <span class="small">60-150 kg CO2 - acceptable</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="rating-circle rating-D" style="width:32px;height:32px;font-size:0.9rem;">D</span>
+                      <span class="small">150-400 kg CO2 - needs improvement</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="rating-circle rating-F" style="width:32px;height:32px;font-size:0.9rem;">F</span>
+                      <span class="small">over 400 kg CO2 - critical</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                  <i class="bi bi-cloud-sun-fill text-success me-2"></i>
+                  Where do weather and air data come from?
+                </button>
+              </h2>
+              <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faq">
+                <div class="accordion-body">
+                  The app uses the OpenWeatherMap API. Two requests are made: one for current weather and another for air quality data (AQI). This lets us assess climate and environmental conditions at the destination.
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                  <i class="bi bi-award-fill text-success me-2"></i>
+                  What do the badges in the traveler profile mean?
+                </button>
+              </h2>
+              <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faq">
+                <div class="accordion-body">
+                  <ul class="mb-0 ps-3 small">
+                    <li><strong>Greta Thunberg</strong> - up to 30 kg. You are a true eco hero!</li>
+                    <li><strong>Forest Guardian</strong> - 30-100 kg. Nature thanks you.</li>
+                    <li><strong>Green Traveler</strong> - 100-300 kg. Room to grow.</li>
+                    <li><strong>Occasional Ecologist</strong> - 300-700 kg. Consider alternatives.</li>
+                    <li><strong>Oil Tycoon</strong> - over 700 kg. Take the train!</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                  <i class="bi bi-lightbulb-fill text-success me-2"></i>
+                  How can I reduce my carbon footprint?
+                </button>
+              </h2>
+              <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faq">
+                <div class="accordion-body">
+                  Choose trains instead of planes when possible. Use public transport and carpooling. Offset emissions by supporting tree-planting projects. Plan routes efficiently and avoid unnecessary transfers.
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="text-center mt-5">
+          <a href="{{ url_for('index') }}" class="btn-eco-primary">
+            <i class="bi bi-calculator-fill"></i>Calculate my footprint
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% block title %}EcoTrip Planner - Home{% endblock %}
+
+{% block content %}
+
+<section class="hero-section">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+  <div class="hero-grid"></div>
+
+  <div class="container position-relative text-center">
+    <div class="animate-fadeup">
+      <span class="hero-pill mb-4 d-inline-flex">
+        <i class="bi bi-leaf-fill"></i>Eco-friendly travel
+      </span>
+    </div>
+    <h1 class="hero-title mb-4 animate-fadeup delay-1">
+      Plan. Measure.<br><span class="accent">Protect the planet.</span>
+    </h1>
+    <p class="hero-subtitle mb-5 mx-auto animate-fadeup delay-2">
+      Calculate your route's carbon footprint and find the greenest way to reach your destination.
+    </p>
+    <div class="animate-fadeup delay-3 d-flex gap-3 justify-content-center flex-wrap">
+      <a href="#plan-form" class="hero-cta btn">
+        <i class="bi bi-calculator-fill me-2"></i>Start calculating
+      </a>
+      <a href="{{ url_for('about') }}" class="btn btn-lg rounded-pill px-4 fw-600" style="background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);font-weight:600;">
+        <i class="bi bi-info-circle me-2"></i>Learn more
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-scroll-hint">
+    <span>Scroll</span>
+    <i class="bi bi-chevron-down"></i>
+  </div>
+</section>
+
+<div class="wave-divider" style="background:#fff;">
+  <svg viewBox="0 0 1440 52" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,32 C240,0 480,52 720,32 C960,12 1200,52 1440,32 L1440,52 L0,52 Z" fill="#0f3d23"/>
+  </svg>
+</div>
+
+<section class="features-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="section-label"><i class="bi bi-stars"></i>Features</span>
+      <h2 class="section-title">Everything for mindful travel</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-3 animate-fadeup delay-1">
+        <div class="feature-card h-100">
+          <div class="feature-icon-wrap ficon-green">
+            <i class="bi bi-graph-down-arrow"></i>
+          </div>
+          <h6 class="fw-bold mb-2">CO2 calculation</h6>
+          <p class="text-muted small mb-0">Accurate emissions per km for plane, car, and train routes.</p>
+        </div>
+      </div>
+      <div class="col-md-3 animate-fadeup delay-2">
+        <div class="feature-card h-100">
+          <div class="feature-icon-wrap ficon-blue">
+            <i class="bi bi-cloud-sun-fill"></i>
+          </div>
+          <h6 class="fw-bold mb-2">Weather and air</h6>
+          <p class="text-muted small mb-0">Live weather and AQI air quality data for any city.</p>
+        </div>
+      </div>
+      <div class="col-md-3 animate-fadeup delay-3">
+        <div class="feature-card h-100">
+          <div class="feature-icon-wrap ficon-amber">
+            <i class="bi bi-award-fill"></i>
+          </div>
+          <h6 class="fw-bold mb-2">Eco rating</h6>
+          <p class="text-muted small mb-0">A to F rating and a personal badge based on total trip impact.</p>
+        </div>
+      </div>
+      <div class="col-md-3 animate-fadeup delay-4">
+        <div class="feature-card h-100">
+          <div class="feature-icon-wrap ficon-purple">
+            <i class="bi bi-lightbulb-fill"></i>
+          </div>
+          <h6 class="fw-bold mb-2">Tips</h6>
+          <p class="text-muted small mb-0">Smart guidance for choosing greener transport on your route.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wave-divider" style="background:var(--sand);">
+  <svg viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,20 C360,40 1080,0 1440,20 L1440,40 L0,40 Z" fill="#fff"/>
+  </svg>
+</div>
+
+<section class="form-section" id="plan-form">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <div class="text-center mb-4">
+          <span class="section-label"><i class="bi bi-map-fill"></i>New trip</span>
+          <h2 class="section-title">Plan your route</h2>
+          <p class="text-muted small">Fill the form and we will calculate your carbon footprint instantly</p>
+        </div>
+        <div class="form-card animate-fadeup delay-2">
+          <div class="form-card-header">
+            <div class="d-flex align-items-center gap-3 position-relative">
+              <div style="width:48px;height:48px;background:rgba(255,255,255,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:#fff;">
+                <i class="bi bi-send-fill"></i>
+              </div>
+              <div>
+                <div class="text-white fw-bold fs-5" style="font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;">New route</div>
+                <div style="color:rgba(255,255,255,0.55);font-size:0.82rem;">Enter your trip details</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-card-body">
+            <form method="POST" action="{{ url_for('index') }}">
+
+              <div class="row g-3 mb-3">
+                <div class="col-6">
+                  <div class="form-floating-label">
+                    <i class="bi bi-geo-alt-fill" style="color:var(--green-600);"></i> From
+                  </div>
+                  <input type="text" class="eco-input form-control" name="origin" placeholder="Moscow" required>
+                </div>
+                <div class="col-6">
+                  <div class="form-floating-label">
+                    <i class="bi bi-geo-fill" style="color:#e11d48;"></i> To
+                  </div>
+                  <input type="text" class="eco-input form-control" name="destination" placeholder="Saint Petersburg" required>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <div class="form-floating-label">
+                  <i class="bi bi-arrows-expand-vertical" style="color:#2563eb;"></i> Distance in kilometers
+                </div>
+                <input type="number" class="eco-input form-control" name="distance" placeholder="For example: 700" min="1" required>
+              </div>
+
+              <div class="mb-5">
+                <div class="form-floating-label mb-2">
+                  <i class="bi bi-truck-front-fill" style="color:#d97706;"></i> Transport type
+                </div>
+                <div class="row g-2">
+                  <div class="col-4">
+                    <input type="radio" class="transport-radio" name="transport_type" id="train" value="train" checked>
+                    <label class="transport-label w-100" for="train">
+                      <i class="bi bi-train-front-fill" style="color:var(--green-600);"></i>
+                      Train
+                      <span class="stat-pill" style="background:var(--green-100);color:var(--green-700);font-size:0.68rem;">0.04 kg/km</span>
+                    </label>
+                  </div>
+                  <div class="col-4">
+                    <input type="radio" class="transport-radio" name="transport_type" id="car" value="car">
+                    <label class="transport-label w-100" for="car">
+                      <i class="bi bi-car-front-fill" style="color:#d97706;"></i>
+                      Car
+                      <span class="stat-pill" style="background:#fef3c7;color:#b45309;font-size:0.68rem;">0.18 kg/km</span>
+                    </label>
+                  </div>
+                  <div class="col-4">
+                    <input type="radio" class="transport-radio" name="transport_type" id="plane" value="plane">
+                    <label class="transport-label w-100" for="plane">
+                      <i class="bi bi-airplane-fill" style="color:#dc2626;"></i>
+                      Plane
+                      <span class="stat-pill" style="background:#fee2e2;color:#b91c1c;font-size:0.68rem;">0.25 kg/km</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="submit-btn btn">
+                <i class="bi bi-calculator-fill me-2"></i>Calculate carbon footprint
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

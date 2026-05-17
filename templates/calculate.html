@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block title %}EcoTrip Planner - Calculation Result{% endblock %}
+
+{% block content %}
+
+<section class="page-hero text-center">
+  <div class="container position-relative">
+    <div class="page-hero-icon animate-fadeup">
+      <i class="bi bi-calculator-fill"></i>
+    </div>
+    <h1 class="animate-fadeup delay-1">Calculation Result</h1>
+    <p class="animate-fadeup delay-2">Carbon footprint for your {{ distance }} km trip</p>
+  </div>
+</section>
+
+<div class="wave-divider" style="background:var(--sand);">
+  <svg viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,0 C480,40 960,0 1440,0 L1440,40 L0,40 Z" fill="#0f3d23"/>
+  </svg>
+</div>
+
+<div style="background:var(--sand);padding:80px 0;">
+  <div class="container">
+    <div class="row g-4 justify-content-center">
+
+      <div class="col-lg-4 animate-fadeup delay-1">
+        <div class="content-card text-center h-100">
+          <div class="card-inner">
+            <p class="text-muted small fw-600 mb-3" style="font-weight:600;letter-spacing:0.04em;text-transform:uppercase;font-size:0.75rem;">CO2 emissions</p>
+
+            <div class="co2-big mb-1">{{ co2 }}</div>
+            <div class="text-muted mb-5" style="font-size:0.85rem;font-weight:500;">kilograms of CO2</div>
+
+            <div class="rating-circle rating-{{ rating }} mb-4">
+              {{ rating }}
+            </div>
+            <p class="text-muted small mb-4">Route eco rating</p>
+
+            <div class="p-3 rounded-3 text-start small
+              {% if rating in ['A','B'] %}
+              " style="background:var(--green-50);border:1px solid var(--green-100);">
+              <i class="bi bi-{% if rating == 'A' %}trophy-fill{% else %}hand-thumbs-up-fill{% endif %} me-2" style="color:var(--green-600);"></i>
+              {% if rating == 'A' %}<strong>Excellent!</strong> Your trip has minimal impact on nature.
+              {% else %}<strong>Good!</strong> Your transport choice is quite eco-friendly.{% endif %}
+              {% elif rating == 'C' %}
+              " style="background:#fffbeb;border:1px solid #fde68a;">
+              <i class="bi bi-emoji-neutral-fill me-2" style="color:#d97706;"></i>
+              <strong>Acceptable.</strong> There is room to improve your route's eco impact.
+              {% else %}
+              " style="background:#fff5f5;border:1px solid #fecaca;">
+              <i class="bi bi-{% if rating == 'D' %}exclamation-triangle-fill{% else %}x-octagon-fill{% endif %} me-2" style="color:#dc2626;"></i>
+              {% if rating == 'D' %}<strong>Needs attention.</strong> Consider greener alternatives.
+              {% else %}<strong>Critical!</strong> This route has a significant climate impact.{% endif %}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5 animate-fadeup delay-2">
+        <div class="content-card h-100">
+          <div class="card-inner">
+            <div class="d-flex align-items-center gap-2 mb-4">
+              <div class="feature-icon-wrap ficon-green" style="width:44px;height:44px;font-size:1.1rem;border-radius:10px;">
+                <i class="bi bi-info-circle-fill"></i>
+              </div>
+              <h5 class="fw-bold mb-0">Trip details</h5>
+            </div>
+
+            <div class="d-flex flex-column gap-0 mb-4">
+              <div class="info-row">
+                <span class="label">Transport</span>
+                <span class="value">{{ transport }}</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Distance</span>
+                <span class="value">{{ distance }} km</span>
+              </div>
+              <div class="info-row">
+                <span class="label">CO2 emissions</span>
+                <span class="value" style="color:var(--green-700);">{{ co2 }} kg</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Eco rating</span>
+                <span class="value">
+                  <span class="rating-circle rating-{{ rating }}" style="width:30px;height:30px;font-size:0.85rem;display:inline-flex;">{{ rating }}</span>
+                </span>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <div class="feature-icon-wrap ficon-amber" style="width:36px;height:36px;font-size:0.95rem;border-radius:9px;">
+                <i class="bi bi-lightbulb-fill"></i>
+              </div>
+              <h6 class="fw-bold mb-0">Recommendation</h6>
+            </div>
+            <div class="p-3 rounded-3 small text-muted" style="background:var(--gray-50);border:1px solid var(--gray-100);line-height:1.6;">
+              {{ suggestion }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-9 animate-fadeup delay-3">
+        <div class="content-card">
+          <div class="card-inner">
+            <div class="d-flex align-items-center gap-2 mb-4">
+              <div class="feature-icon-wrap ficon-purple" style="width:44px;height:44px;font-size:1.1rem;border-radius:10px;">
+                <i class="bi bi-bar-chart-fill"></i>
+              </div>
+              <div>
+                <h5 class="fw-bold mb-0">Transport comparison</h5>
+                <p class="text-muted small mb-0">for a {{ distance }} km route</p>
+              </div>
+            </div>
+
+            <div class="row g-3">
+              {% for t_name, t_key, t_co2, t_icon, t_hex, t_bg, t_text in [
+                ("Train",     "train", (distance * 0.04)|round(1), "bi-train-front-fill", "#16a34a", "#dcfce7", "#166534"),
+                ("Car",       "car",   (distance * 0.18)|round(1), "bi-car-front-fill",   "#d97706", "#fef3c7", "#92400e"),
+                ("Plane",     "plane", (distance * 0.25)|round(1), "bi-airplane-fill",    "#dc2626", "#fee2e2", "#991b1b")
+              ] %}
+              <div class="col-md-4">
+                <div class="compare-bar-card {% if t_key in transport|lower %}active-transport{% endif %}">
+                  <div class="d-flex align-items-center gap-2 mb-3">
+                    <div style="width:38px;height:38px;background:{{ t_bg }};border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;color:{{ t_text }};">
+                      <i class="bi {{ t_icon }}"></i>
+                    </div>
+                    <div>
+                      <div class="fw-bold small">{{ t_name }}</div>
+                      <div style="font-size:0.72rem;color:var(--gray-400);">kg CO2</div>
+                    </div>
+                  </div>
+                  <div style="font-size:1.6rem;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;color:{{ t_text }};letter-spacing:-0.02em;">
+                    {{ t_co2 }}
+                  </div>
+                  <div class="eco-progress mt-2">
+                    <div class="eco-progress-bar"
+                         style="width:{{ [((t_co2 / (distance * 0.25)) * 100)|int, 100]|min }}%;background:{{ t_hex }};"></div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-center mt-5 d-flex gap-3 justify-content-center flex-wrap">
+      <a href="{{ url_for('index') }}" class="btn-eco-outline">
+        <i class="bi bi-arrow-left"></i>New trip
+      </a>
+      <a href="{{ url_for('profile') }}" class="btn-eco-primary">
+        <i class="bi bi-person-circle"></i>My profile
+      </a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
